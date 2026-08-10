@@ -24,7 +24,7 @@ const TaskList = ({ tasks, onDeleteTask }) => {
             No tasks yet ......
           </h3>
           <p className="text-gray-600">
-            Get started by creating your first task! hhhhhhhhhhhhhhhhhhhh xd 
+            Get started by creating your first task! hhhhhhhhhhhhhhhhhhh xd 
           </p>
         </div>
       </div>
