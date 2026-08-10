@@ -61,8 +61,16 @@ jobs:
 
       - name: Write SSH key
         run: |
-          echo "${EC2_KEY}" > ec2_key.pem
-          chmod 600 ec2_key.pem
+          # cree le fichier deja en 600 : evite que la cle soit lisible
+          # par tous, meme une fraction de seconde
+          install -m 600 /dev/null ec2_key.pem
+          # tr -d '\r' : un secret copie depuis Windows contient des CRLF
+          # que le parseur PEM d'OpenSSL rejette ("error in libcrypto")
+          printf '%s\n' "${EC2_KEY}" | tr -d '\r' > ec2_key.pem
+          # echoue ici avec un message clair si la cle est malformee,
+          # au lieu d'un "Permission denied (publickey)" trompeur plus loin
+          ssh-keygen -y -f ec2_key.pem > /dev/null
+          echo "Cle SSH valide"
         env:
           EC2_KEY: ${{ secrets.EC2_KEY }}
 
